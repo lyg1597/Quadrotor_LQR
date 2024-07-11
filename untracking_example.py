@@ -16,23 +16,27 @@ def compute_goal(c,r,x):
     return [cx, cy, cz]
 
 def step_ref(goal, i, ref_v):
-    if int(i/200)%2 == 0:
+    if int(i/600)%2 == 0:
         goal[1] -= ref_v
     else:
         goal[1] += ref_v
     return goal
 
 def check_in_range(x, ref_goal):
-    if abs(ref_goal[0] - x[0]) > abs(ref_goal[1] - x[2]):
-        return True 
-    else:
+    # if abs(ref_goal[0] - x[0]) > abs(ref_goal[1] - x[2]):
+    #     return True 
+    # else:
+    #     return False
+    if i>600 and i<700:
         return False
+    else:
+        return True
 
-def get_actual_goal(x, ref_goal):
+def get_actual_goal(x, ref_goal, i=0):
     global prev_goal 
     global prev_r
-    # if check_in_range(x, ref_goal):
-    if True:
+    if check_in_range(x, ref_goal):
+    # if True:
         prev_goal = ref_goal
         prev_r = 0
         act_goal = [ref_goal[0]-5, ref_goal[1], ref_goal[2]]
@@ -58,9 +62,9 @@ if __name__ == "__main__":
     res = []
     # diff = []
     for i in range(1000):
-        if i==205:
+        if i==660:
             print("here")
-        actual_goal = get_actual_goal(x, ref_goal)
+        actual_goal = get_actual_goal(x, ref_goal, i)
         res.append(np.concatenate(([i],x, ref_goal, actual_goal)))
         x = simulate(x, actual_goal, dt)
         ref_goal = step_ref(ref_goal,i, ref_v)       
