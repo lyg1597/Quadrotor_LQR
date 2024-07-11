@@ -10,19 +10,39 @@ Iy = 8.1 * 1e-3
 Iz = 14.2 * 1e-3
 
 def f(x, u):
-    x1, x2, y1, y2, z1, z2, phi1, phi2, theta1, theta2, psi1, psi2 = x.reshape(-1).tolist()
+    x1, x2, y1, y2, z1, z2, theta1, theta2, phi1, phi2, psi1, psi2 = x.reshape(-1).tolist()
     ft, tau_x, tau_y, tau_z = u.reshape(-1).tolist()
     dot_x = np.array([
-     x2,
-     ft/m*(np.sin(phi1)*np.sin(psi1)+np.cos(phi1)*np.cos(psi1)*np.sin(theta1)),
-     y2,
-     ft/m*(np.cos(phi1)*np.sin(psi1)*np.sin(theta1)-np.cos(psi1)*np.sin(phi1)),
-     z2,
-     -g+ft/m*np.cos(phi1)*np.cos(theta1),
-     phi2,
-     (Iy-Iz)/Ix*theta2*psi2+tau_x/Ix,
-     theta2,
-     (Iz-Ix)/Iy*phi2*psi2+tau_y/Iy,
-     psi2,
-     (Ix-Iy)/Iz*phi2*theta2+tau_z/Iz])
+        x2,
+        ft/m*(np.sin(phi1)*np.sin(psi1)+np.cos(phi1)*np.cos(psi1)*np.sin(theta1)),
+        y2,
+        ft/m*(np.cos(phi1)*np.sin(psi1)*np.sin(theta1)-np.cos(psi1)*np.sin(phi1)),
+        z2,
+        -g+ft/m*np.cos(phi1)*np.cos(theta1),
+        theta2,
+        (Iz-Ix)/Iy*phi2*psi2+tau_y/Iy,
+        phi2,
+        (Iy-Iz)/Ix*theta2*psi2+tau_x/Ix,
+        psi2,
+        (Ix-Iy)/Iz*phi2*theta2+tau_z/Iz
+    ])
+    return dot_x
+
+def f_linear(x, u):
+    x1, x2, y1, y2, z1, z2, theta1, theta2, phi1, phi2, psi1, psi2 = x.reshape(-1).tolist()
+    ft, tau_x, tau_y, tau_z = u.reshape(-1).tolist()
+    dot_x = np.array([
+        x2,
+        g*theta1,
+        y2,
+        -g*phi1,
+        z2,
+        ft/m,
+        theta2,
+        tau_y/Ix,
+        phi2,
+        tau_x/Iy,
+        psi2,
+        tau_z/Iz
+    ])
     return dot_x
